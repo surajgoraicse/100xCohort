@@ -1,0 +1,53 @@
+name: taskify
+
+services:
+  backend:
+    container_name: taskify-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    networks:
+      - taskify-network
+
+  mongo:
+    image: mongo
+    container_name: taskify-mongo
+    restart: always
+    volumes:
+      - mongo-taskify-volume:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - taskify-network
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+
+  mongo-express:
+    image: mongo-express
+    container_name: taskify-mongo-express
+    restart: always
+    depends_on:
+      - mongo
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_URL: mongodb://admin:password@mongo:27017/?authSource=admin
+      ME_CONFIG_BASICAUTH: false
+    networks:
+      - taskify-network
+
+volumes:
+  mongo-taskify-volume:
+
+networks:
+  taskify-network:
+    driver: bridge
