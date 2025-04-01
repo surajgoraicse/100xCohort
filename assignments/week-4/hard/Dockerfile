@@ -8,7 +8,11 @@ WORKDIR /home/app
 COPY package*.json ./
 
 # Install production dependencies only
-RUN npm install --omit=dev
+RUN npm install 
+
+# Install nodemon globally
+
+RUN npm install -g nodemon 
 
 # Copy rest of the application files
 COPY . .

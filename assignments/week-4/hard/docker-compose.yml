@@ -14,6 +14,8 @@ services:
       - mongo
     networks:
       - taskify-network
+    volumes:
+      - /home/suraj/Desktop/cohort/assignments/week-4/hard:/home/app # Sync local folder to container
 
   mongo:
     image: mongo
