@@ -13,15 +13,42 @@ const app = express();
 
 let numberOfRequestsForUser = {};
 setInterval(() => {
-    numberOfRequestsForUser = {};
+  numberOfRequestsForUser = {};
 }, 1000)
 
-app.get('/user', function(req, res) {
+
+app.use((req, res, next) => {
+
+  const user = req.headers["user-id"]
+  if (numberOfRequestsForUser[user]) {
+    numberOfRequestsForUser[user] += 1
+  } else {
+    numberOfRequestsForUser[user] = 1
+
+  }
+
+  if (numberOfRequestsForUser[user] > 5) {
+    return res.status(404).end()
+  }
+  console.log(numberOfRequestsForUser);
+  next()
+})
+
+
+app.get('/user', function (req, res) {
   res.status(200).json({ name: 'john' });
 });
 
-app.post('/user', function(req, res) {
+app.post('/user', function (req, res) {
   res.status(200).json({ msg: 'created dummy user' });
 });
+
+
+if (require.main === module) {
+  app.listen(3000, () => {
+    console.log("server is listening at port 3000");
+  })
+}
+
 
 module.exports = app;
