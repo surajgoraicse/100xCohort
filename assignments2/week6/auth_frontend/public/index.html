@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<div>
+			signup
+			<input id="signup_username" type="text" placeholder="username" />
+			<input id="signup_password" type="password" placeholder="password" />
+			<button onclick="signup()">Submit</button>
+		</div>
+		<div>
+			login
+			<input id="login_username" type="text" placeholder="username" />
+			<input id="login_password" type="password" placeholder="password" />
+			<button onclick="login()">Submit</button>
+		</div>
+		<div>
+			<h1>User information :</h1>
+			<h1 id="user_information"></h1>
+		</div>
+
+		<button onclick="getMyInformation()">Show data</button>
+
+		<!-- js goes here -->
+
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<script>
+			async function signup() {
+				const username = document.getElementById("signup_username").value;
+				const password = document.getElementById("signup_password").value;
+
+				const res = await axios.post("http://localhost:3000/signup", {
+					username,
+					password,
+				});
+
+				if (res.status == 200) {
+					console.log(res);
+					return res.data;
+				} else {
+					console.log("signup failed");
+				}
+			}
+
+			async function login() {
+				const username = document.getElementById("login_username").value;
+				const password = document.getElementById("login_password").value;
+
+				const res = await axios.post("http://localhost:3000/signin", {
+					username: username,
+					password: password,
+				});
+				if (res.status == 200) {
+					console.log("login successfull");
+					console.log(res);
+				} else {
+					console.log("login failed");
+				}
+			}
+
+			async function getMyInformation() {
+				const res = await axios.get("http://localhost:3000/me");
+				if(res.status != 200){
+					return console.log("username fetch failed");
+				}
+				document.getElementById("user_information").innerText = res.data.verifyJwt.username;
+				console.log(res.data);
+			}
+
+			// getMyInformation();
+		</script>
+	</body>
+</html>
