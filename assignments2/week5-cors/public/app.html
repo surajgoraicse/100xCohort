@@ -1,0 +1,19 @@
+<head>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script>
+		async function sendRequest() {
+			const a = document.getElementById("a").value;
+			const b = document.getElementById("b").value;
+			const res = await axios.post("http://localhost:3000/sum", {
+				a: a,
+				b: b,
+			});
+			console.log(res);
+		}
+	</script>
+</head>
+<body>
+	<input id="a" type="text" placeholder="first input" />
+	<input id="b" type="text" placeholder="second input" />
+	<button onclick="sendRequest()">Submit</button>
+</body>
