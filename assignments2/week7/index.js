@@ -3,6 +3,7 @@ const express = require("express")
 const jwt = require("jsonwebtoken")
 require('dotenv').config()
 const cookieParser = require("cookie-parser")
+const bcrypt = require("bcryptjs")
 
 // make database connection 
 // create signup , login , and auth route
@@ -34,9 +35,11 @@ const jwtSecret = "Ilovekrishna"
 
 app.post("/signup", async (req, res) => {
     const name = req.body.name
-    const password = req.body.password
+    let password = req.body.password
     const email = req.body.email
 
+
+    password = await bcrypt.hash(password, 10)
 
     const user = await UserModel.create(
         {
@@ -60,12 +63,15 @@ app.post("/login", async (req, res) => {
     const { name, password } = req.body
 
 
-    const user = await UserModel.findOne({ name, password })
+    const user = await UserModel.findOne({ name })
     console.log("User form the db", user);
-    if (user) {
 
+    if (user) {
+        const compare = await bcrypt.compare(password, user.password)
+        if (compare === false) {
+            return res.status(404).json({ message: "password is incorrect" })
+        }
         const token = jwt.sign({ id: user._id }, jwtSecret || "someJwtSecret")
-        console.log("genereated jwt ", token);
 
         return res.status(200).cookie("token", token).json({ message: "signed in successfully" })
     } else {

@@ -12,7 +12,10 @@ const User = new Schema({
 const Todo = new Schema({
     title: String,
     done: Boolean,
-    userId: mongoose.Schema.ObjectId
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }
 })
 
 
