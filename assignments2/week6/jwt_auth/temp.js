@@ -19,4 +19,3 @@ const data = {
     username: "suraj",
     password : "21323dfdf"
 }
-console.log(generateToken(data));
