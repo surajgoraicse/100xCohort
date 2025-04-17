@@ -8,10 +8,26 @@ const app = express.Router()
 app.get('/' , (req,res)=>{})
 
 
+// use to purchase a coures
+app.post('/purchase', (req, res) => [
+    
+])
 
-// admin course routes
-app.get()
+// lists all the couses
+app.get('/allCourse', (req, res) => [
+    
+])
 
+app.get('/allPurchasedCourses', (req, res) => [
+    
+])
+
+
+// admin coures route 
+
+app.post('/purchase', (req, res) => [
+    
+])
 
 
 module.exports = app

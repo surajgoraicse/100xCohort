@@ -9,6 +9,10 @@ app.post('/signin', (req, res) => [
     
 ])
 
+app.get('/', (req, res) => {
+    res.send("this is some data")
+})
+
 
 
 
