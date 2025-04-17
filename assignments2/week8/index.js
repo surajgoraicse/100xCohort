@@ -1,4 +1,4 @@
-const expres = require('express')
+const express = require('express')
 require('dotenv').config()
 const cors = require('cors')
 const morgan = require('morgan')
@@ -13,7 +13,7 @@ connectDb(DB_URI)
 
 // express config
 const PORT = process.env.PORT || 8001
-const app = expres()
+const app = express()
 app.use(cors())
 app.use(morgan("dev"))
 app.use(cookieParser())
@@ -28,8 +28,8 @@ const courseRouter = require("./routes/course.router")
 
 
 // using the routes
-app.use('/user', userRouter)
-app.use('/course', courseRouter)
+app.use('/api/v1/user', userRouter)
+app.use('/api/v1/course', courseRouter)
 
 
 
