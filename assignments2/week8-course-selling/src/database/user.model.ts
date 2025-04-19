@@ -1,5 +1,7 @@
+import jwt from "jsonwebtoken";
 import { Document, model, Schema } from "mongoose";
-
+const accessTokenSecret =
+	process.env.ACCESS_TOKEN_SECRET || "thisissomejwtaccesstokensecret";
 
 export interface IUser extends Document {
 	username: string;
@@ -10,6 +12,7 @@ export interface IUser extends Document {
 	profileImage: string;
 	createdAt: Date;
 	updatedAt: Date;
+	genereateAccessToken(): string;
 }
 
 const userSchema = new Schema<IUser>(
@@ -53,5 +56,25 @@ const userSchema = new Schema<IUser>(
 	{ timestamps: true }
 );
 
+// function to genereate access token
+
+userSchema.methods.generateRefreshToken = (
+	username: string,
+	email: string,
+	role: "user" | "admin"
+): string | null => {
+	try {
+		const token = jwt.sign({ username, email, role }, accessTokenSecret, {
+			expiresIn: "10d",
+			issuer: "surajgorai",
+		});
+		return token;
+	} catch (error) {
+		console.log(error);
+		return null;
+	}
+};
+
 const UserModel = model<IUser>("User", userSchema);
 export default UserModel;
+
